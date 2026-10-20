@@ -1,0 +1,18 @@
+Bounded computational replay environment
+Python: 3.14.7
+NumPy: 2.4.2
+Dependency pin: requirements.txt
+
+Normal replay: python3 -B code/replay.py
+Optimized replay: python3 -B -O code/replay.py
+Semantic negative control: python3 -B code/check_negative.py
+
+The negative-control wrapper launches optimized Python and requires rejection of
+an intentionally incorrect finite-chain expectation. No assertion statement is
+needed to enforce the new replay checks.
+
+PDF construction uses Pandoc and Tectonic via code/build_paper.py; these are not
+dependencies of the mathematical checks. See TYPESETTING.md.
+
+The environment of the original historical simulation receipts was not fully
+recorded. Their preservation does not establish bitwise regeneration.

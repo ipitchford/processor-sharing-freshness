@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "release": "processor-sharing-freshness",
+  "version": "1.0.0-candidate",
+  "claims": [
+    {
+      "id": "PSF-1",
+      "statement": "The stated pure-power small-service hypothesis gives the stationary age weak limit and convergence of all positive moments.",
+      "evidenceClass": "written-analytic-proof",
+      "evidence": ["paper.md Theorem 1, Sections 3.1–3.5"],
+      "scope": "Lossless stationary M/G/1 egalitarian processor sharing, Poisson arrivals, finite mean service, positive small-service exponent, retained obsolete jobs and freshest-delivered timestamp convention.",
+      "limitations": ["Uses explicitly cited classical stationary input from Zachary (2007).", "No finite-load approximation error bound is claimed."]
+    },
+    {
+      "id": "PSF-2",
+      "statement": "Positive-index regularly varying small-service distributions admit the integral normalization, the stated weak limit and convergence of all positive moments.",
+      "evidenceClass": "written-analytic-proof",
+      "evidence": ["paper.md Theorem 1a, Section 3.6"],
+      "scope": "The model assumptions of PSF-1, with arbitrary positive-index regular variation replacing the pure power.",
+      "limitations": ["Index zero, rapid variation and positive minimum service requirements are excluded.", "Not proof-assistant verified."]
+    },
+    {
+      "id": "PSF-3",
+      "statement": "A logarithmic slowly varying factor yields the normalization in equation R8.",
+      "evidenceClass": "written-analytic-proof-with-bounded-diagnostic",
+      "evidence": ["paper.md equation R8 and substitution proof", "code/replay.py"],
+      "scope": "The logarithmic example within the positive-index regularly varying theorem.",
+      "limitations": ["The replay diagnostic checks one example, not the general analytic theorem."]
+    },
+    {
+      "id": "PSF-4",
+      "statement": "Exponential service gives mean-age coefficient pi/(2 sqrt(2)) and the stated global stochastic sandwich.",
+      "evidenceClass": "written-analytic-proof",
+      "evidence": ["paper.md Corollary 2", "paper.md Proposition 3"],
+      "scope": "Exponential service under the stated lossless processor-sharing model.",
+      "limitations": ["The global sandwich is not claimed for general service distributions."]
+    },
+    {
+      "id": "PSF-5",
+      "statement": "The finite-capacity means at load one half are 10/3, 45/14 and 1292/405 for capacities one, two and three.",
+      "evidenceClass": "exact-finite-computational-check",
+      "evidence": ["code/replay.py", "evidence/replay-normal.json", "evidence/replay-optimized.json"],
+      "scope": "The three finite-capacity rational systems encoded by the checker.",
+      "limitations": ["Not an infinite-buffer proof or independent replication of the entire research."]
+    },
+    {
+      "id": "PSF-6",
+      "statement": "The release preserves supplied historical simulation tables as historical evidence.",
+      "evidenceClass": "supplied-historical-simulation",
+      "evidence": ["evidence/historical/verification.json", "evidence/historical/erlang_verification.json"],
+      "scope": "Only the original recorded runs and their stated settings.",
+      "limitations": ["Not newly rerun.", "Historical NumPy version is unknown.", "Finite-load bias remains; no bitwise regeneration claim."]
+    }
+  ],
+  "globalLimitations": [
+    "AI-assisted mathematical checking is not external human peer-review acceptance.",
+    "No proof-assistant formal verification or absolute novelty assertion is claimed.",
+    "Historical priority remains bounded by the accessible searches described in NOVELTY_SCOPE.md."
+  ]
+}

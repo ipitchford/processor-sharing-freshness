@@ -1,0 +1,626 @@
+# Small service requirements determine information freshness near saturation
+
+**Anonymous. Revised 20 October 2026.**
+
+## Abstract
+
+Consider a stationary lossless M/G/1 queue under egalitarian processor sharing. Every arrival carries its generation timestamp, and the monitor retains the greatest timestamp delivered so far. If the service CDF satisfies \(G(x)\sim cx^\beta\) at zero and has finite mean \(m\), we prove that the stationary information age, multiplied by \((1-\rho)^{\beta/(\beta+1)}\), converges to a product of powers of two independent exponential variables. Every positive real moment converges. More generally, the same law holds for every service CDF regularly varying at zero with positive index, with an explicit integral-defined normalization that also captures slowly varying factors. The proof uses an exact survival product in a queue with immortal fresh arrivals, a monotone coupling to bound old departures using only stationarity, and a uniform exponential tail estimate. No finite service second moment is required. Queues with identical stationary population distributions can therefore have different information-age scales. For exponential service, the exact mean-age coefficient is \(\pi/(2\sqrt2)\) in units of \(1/(\mu\sqrt{1-\rho})\). Stochastic bounds establish the valid components of the inspected arXiv version of a 2023 conjecture, and the limit replaces both printed near-saturation bounds. Neither processor-sharing insensitivity nor the product distribution is claimed as new.
+
+**Keywords:** age of information; processor sharing; heavy traffic; regular variation; stationary queues; moment convergence.
+
+## 1. Problem and relation to previous work
+
+Age of information measures how old the freshest delivered observation is. Out-of-order delivery matters: a packet may still occupy the server even after another packet with a later timestamp has completed. Equal processor sharing offers fresh packets immediate access to service, although most of the capacity of a nearly saturated queue is shared with older work. The question is how quickly stationary age grows as the arrival rate approaches the stability boundary.
+
+Liu, Huang, Li and Ji (2021) studied processor sharing among competing age-based scheduling policies and reported simulations with exponential and Weibull service requirements. Gandarias, Doncel and Assaad (2023) analysed finite-capacity processor-sharing systems and stated a conjecture for the mean age of the infinite-buffer M/M/1 system. Conjecture 1, equations (19)–(20), in their inspected arXiv manuscript suggests a square-root upper growth scale and leaves the mean correction undetermined. Its two printed near-saturation bounds are also algebraically incompatible; noticing that inconsistency alone does not determine the correct asymptotics.
+
+This paper proves a broader result. For a fixed service distribution with \(G(x)\sim cx^\beta\) near zero, the age exponent is \(\beta/(\beta+1)\). The entire limiting law and all positive moments are identified. The special case \(\beta=1\) supplies the exact exponential-service constant and, together with separate stochastic comparisons, settles every mathematically consistent assertion in the inspected conjecture.
+
+The stationary M/G/1 processor-sharing population is geometric and insensitive to the service distribution beyond its mean. This classical fact is an input to the proof, obtained here from Zachary (2007), with wider network background in Bonald and Proutière (2002). It does not imply insensitivity of freshness. The completion of one sufficiently short new job refreshes the monitor, so the lower end of the service distribution governs the age scale. Section 3 makes this explanation rigorous without a fluid-limit assumption or a service second-moment condition.
+
+**Guide to the argument.** Theorem 1 gives an explicit formula for the familiar power-law case. Its proof has three distinct tasks: express age as a first-completion event, show that the large initial population changes negligibly on the shorter freshness time scale, and control the tail strongly enough to pass to moments. Section 3.6 then proves the regularly varying extension, which permits logarithmic corrections to a power law. Readers primarily interested in consequences can proceed from the theorems to the equal-mean examples in Section 4 and the exponential-service comparison in Section 5. The numerical checks in Section 6 test representations and illustrate finite-load bias; they are not premises of the proofs.
+
+## 2. Model and main theorem
+
+Packets arrive according to a Poisson process of rate \(\lambda_\rho=\rho/m\), where \(0<\rho<1\). Their independent and identically distributed service requirements have CDF \(G\), independently of arrivals. Total service capacity is one unit of work per unit time: with \(n\) packets present, each receives work at rate \(1/n\). The buffer is infinite. Every packet remains until completion, including packets that have become obsolete.
+
+Write \(a_j\) and \(d_j\) for generation/arrival and departure times. The stationary age process is
+
+\[
+A_\rho(t)=t-\sup\{a_j:d_j\leq t\}.
+\]
+
+Thus an old completion does not overwrite a fresher timestamp. This is the convention implemented by the fake-update transition in Appendix A, Table I, of Gandarias et al. (2023). Write \(A_\rho\) for the age at a stationary observation time. We assume the queue is in its standard stationary regime and vary only the Poisson rate as \(\rho\uparrow1\).
+
+Let service requirements \(S\) have cumulative distribution function \(G\), with
+
+\[
+0<m=\mathbb ES<\infty,\qquad
+G(x)\sim c x^\beta\quad(x\downarrow0),\qquad c,\beta>0.
+\tag{G1}
+\]
+
+For this model and service law, write
+
+\[
+\varepsilon=1-\rho,\qquad
+\alpha=\frac{\beta}{\beta+1},\qquad
+\kappa=\left(\frac{(\beta+1)m}{c}\right)^{1/(\beta+1)}.
+\]
+
+**Theorem 1 (general-service heavy-traffic law).** If \(X,E\) are independent unit-mean exponential variables, then
+
+\[
+\varepsilon^\alpha A_\rho\Rightarrow
+V=\kappa X^\alpha E^{1-\alpha}.
+\tag{G2}
+\]
+
+For every real \(p>0\),
+
+\[
+\lim_{\rho\uparrow1}\mathbb E[(\varepsilon^\alpha A_\rho)^p]
+=\kappa^p\Gamma(1+\alpha p)\Gamma(1+(1-\alpha)p).
+\tag{G3}
+\]
+
+In particular,
+
+\[
+\mathbb EA_\rho\sim
+\frac{\kappa\Gamma(1+\alpha)\Gamma(2-\alpha)}{(1-\rho)^\alpha}.
+\tag{G4}
+\]
+
+No finite second moment of \(S\) is assumed. The hypothesis constrains only the lower end of the service distribution and its mean. A positive lower bound on service requirements is outside the theorem.
+
+The limiting distribution itself is a familiar product of powers of exponential variables. The research claim is its occurrence as the stationary age limit, with an exponent determined by the lower endpoint of \(G\).
+
+## 3. Proof of the general-service theorem
+
+### 3.1 Normalisation and classical stationary input
+
+Replace clock time by \(t/m\) and service requirements by \(S/m\). The resulting mean service requirement is one, arrival rate is \(\rho\), and service CDF is
+
+\[
+F(x)=G(mx)\sim a x^\beta,\qquad a=c m^\beta.
+\tag{G5}
+\]
+
+We prove the result in these units and restore \(m\) at the end.
+
+The classical insensitivity theorem for the M/G/1 processor-sharing queue gives
+
+\[
+\mathbb P(N=n)=(1-\rho)\rho^n\quad(n\geq0).
+\tag{G6}
+\]
+
+Conditional on \(N=n\), the residual service requirements have the product equilibrium-residual distribution. These facts follow, for example, from Zachary (2007), Theorem 1: take his arrival function \(\alpha(n)=\rho\), aggregate service function \(\beta(n)=1\) for \(n>0\), and unit-mean service law \(F\). His balance equations reduce to \(\pi(n+1)=\rho\pi(n)\). The input law here has no atom at zero by (G1), and \(\sum_n\pi(n)\alpha(n)=\rho<\infty\).
+
+The only parts of this stationary input needed for the proof are (G6), finiteness of \(\mathbb EN\), and stationarity. If \(D_o(t)\) is the total number of departures from an ordinary stationary queue during \([0,t]\), conservation of customers gives
+
+\[
+\mathbb ED_o(t)=\rho t.
+\tag{G7}
+\]
+
+Indeed, \(D_o(t)=N(0)+B(t)-N(t)\), the expectations of the two stationary populations cancel, and the mean arrival count is \(\rho t\). No second service moment or bounded departure intensity is needed.
+
+### 3.2 An exact auxiliary process
+
+Initialise the queue at stationarity at zero. Call its \(N\) initial packets old, and call every packet arriving after zero fresh. For fixed \(t>0\), the event \(A_\rho(0)>t\) says that no packet generated after \(-t\) has completed by zero. Shifting this event forward by \(t\) and using stationarity gives
+
+\[
+\mathbb P(A_\rho>t)
+=\mathbb P(\text{no fresh packet completes during }[0,t]).
+\tag{G8}
+\]
+
+Construct an auxiliary queue from the same initial old residuals and the same Poisson arrival epochs. Every fresh packet remains forever and continues sharing the processor, irrespective of its finite service requirement. Old packets retain their original residual requirements and depart when those are exhausted. Let \(B(t)\) be the fresh-arrival count, \(M(t)\) the auxiliary old population, and
+
+\[
+Q^*(t)=M(t)+B(t).
+\]
+
+The auxiliary evolution depends on the old residuals and the fresh arrival epochs. It is independent of every fresh packet's service requirement. A packet arriving at \(a_j\in(0,t]\) receives auxiliary service
+
+\[
+V_j(t)=\int_{a_j}^t\frac{du}{Q^*(u)}.
+\tag{G9}
+\]
+
+The denominator is positive on this integration interval because the fresh packet itself remains present. The ordinary queue and the auxiliary queue coincide until the first fresh completion. Hence no fresh completion occurs by \(t\) exactly when every fresh requirement exceeds its auxiliary service. Conditional independence of the fresh requirements therefore yields the exact identity
+
+\[
+\mathbb P(A_\rho>t)
+=\mathbb E\prod_{j:a_j\leq t}\bigl(1-F(V_j(t))\bigr).
+\tag{G10}
+\]
+
+The empty product is one. This formula is valid for general service CDFs, including distributions with atoms away from zero.
+
+### 3.3 Why old departures stay negligible
+
+Couple the ordinary queue used in (G7) to the auxiliary queue using the same arrivals and finite service requirements, except that auxiliary fresh requirements are infinite. On every finite interval there are finitely many arrivals and initially finitely many packets, so the following comparison can be established by induction through arrival and departure events.
+
+At every time, each packet still present in the ordinary queue is also present in the auxiliary queue. For any common old packet, its ordinary residual work is at most its auxiliary residual work. The assertion holds initially. Between events, the ordinary queue has at most as many packets, so it gives each common packet at least as much service. An ordinary departure preserves the inclusion. If an auxiliary old packet completes, its ordinary counterpart has already completed or completes at the same time, so inclusion is again preserved. Fresh packets never leave the auxiliary system. A common arrival preserves the assertion.
+
+Consequently every auxiliary old departure occurs no earlier than the corresponding ordinary departure, and
+
+\[
+0\leq N-M(t)\leq D_o(t).
+\tag{G11}
+\]
+
+Take \(t=s\varepsilon^{-\alpha}\). Since \(\alpha<1\), (G7) and Markov's inequality imply
+
+\[
+\varepsilon D_o(s\varepsilon^{-\alpha})\to0
+\quad\text{in probability},
+\qquad
+\varepsilon B(s\varepsilon^{-\alpha})\to0
+\quad\text{in probability}.
+\tag{G12}
+\]
+
+Together with (G6), this proves that the scaled auxiliary population is frozen on each compact rescaled time interval:
+
+\[
+\varepsilon N\Rightarrow X\sim\operatorname{Exp}(1),\qquad
+\sup_{0\leq u\leq s}
+|\varepsilon Q^*(u\varepsilon^{-\alpha})-\varepsilon N|
+\to0\quad\text{in probability}.
+\tag{G13}
+\]
+
+This is the step for which exponential service would have been unnecessarily restrictive. The departure-count identity (G7) supplies the needed bound for every finite-mean service distribution.
+
+### 3.4 Convergence of the exact product
+
+Let \(u_j=\varepsilon^\alpha a_j\), and put \(t=s\varepsilon^{-\alpha}\). From (G9),
+
+\[
+V_j(t)=\varepsilon^{1-\alpha}
+\int_{u_j}^s\frac{du}{\varepsilon Q^*(u\varepsilon^{-\alpha})}.
+\tag{G14}
+\]
+
+After restricting to \(\varepsilon N\geq\delta>0\), (G13) shows, uniformly over all \(j\) with \(u_j\leq s\), that the last integral is
+
+\[
+\frac{s-u_j}{\varepsilon N}+o_{\mathbb P}(1).
+\tag{G15}
+\]
+
+It is useful to make the summation control explicit. On a high-probability set on which \(\varepsilon Q^*\) is between \(\varepsilon N-\eta\) and \(\varepsilon N+\eta\), all the service integrals in (G14) lie between
+
+\[
+\frac{\varepsilon^{1-\alpha}(s-u_j)}{\varepsilon N+\eta}
+\quad\text{and}\quad
+\frac{\varepsilon^{1-\alpha}(s-u_j)}{\varepsilon N-\eta}.
+\]
+
+This multiplicative sandwich avoids accumulating a separate approximation error for every arrival. The Poisson law of large numbers gives
+
+\[
+\varepsilon^\alpha\sum_{j:u_j\leq s}(s-u_j)^\beta
+\longrightarrow\int_0^s(s-u)^\beta\,du
+=\frac{s^{\beta+1}}{\beta+1}
+\quad\text{in probability}.
+\tag{G16}
+\]
+
+Its expectation tends to the displayed integral because the rescaled arrival intensity is \(\rho\varepsilon^{-\alpha}\); its variance is \(O(\varepsilon^\alpha)\). As \(\beta(1-\alpha)=\alpha\), (G5), (G14)-(G16), and then \(\eta\downarrow0\), yield
+
+\[
+\sum_{j:a_j\leq t}F(V_j(t))
+\Rightarrow \frac{a s^{\beta+1}}{(\beta+1)X^\beta}.
+\tag{G17}
+\]
+
+On the same high-probability sets, \(\max_j V_j(t)\to0\), so \(\max_j F(V_j(t))\to0\). Thus
+
+\[
+\left|\sum_j\log(1-F(V_j(t)))+\sum_jF(V_j(t))\right|
+\leq\frac{\max_jF(V_j(t))}{1-\max_jF(V_j(t))}\sum_jF(V_j(t))
+\to0
+\]
+
+in probability. Finally remove the restriction \(\varepsilon N\geq\delta\) by letting \(\delta\downarrow0\), since its limiting excluded probability is \(1-e^{-\delta}\).
+
+The product in (G10) is bounded between zero and one. Its expectation therefore converges, and
+
+\[
+\mathbb P(\varepsilon^\alpha A_\rho>s)
+\longrightarrow
+\mathbb E\exp\left\{-\frac{a s^{\beta+1}}{(\beta+1)X^\beta}\right\}.
+\tag{G18}
+\]
+
+This is the survival function of
+
+\[
+\left(\frac{\beta+1}{a}\right)^{1/(\beta+1)}X^\alpha E^{1-\alpha}
+\]
+
+in mean-one service units.
+
+### 3.5 Uniform exponential tails and moment convergence
+
+Choose \(x_0>0\) and \(a_0>0\) such that
+
+\[
+F(x)\geq a_0x^\beta\qquad(0\leq x\leq x_0).
+\tag{G19}
+\]
+
+For sufficiently small \(\varepsilon\), set \(t=s\varepsilon^{-\alpha}\) and consider the event
+
+\[
+\mathcal H=\{N\leq s/\varepsilon,\ B(t)\leq2\rho t,
+\ B(t/2)\geq\rho t/4\}.
+\]
+
+The geometric and Poisson Chernoff bounds imply, uniformly over \(\rho\geq1/2\),
+
+\[
+\mathbb P(\mathcal H^c)
+\leq e^{-s}+e^{-\rho t/3}+e^{-\rho t/16}
+\leq e^{-s}+e^{-s/6}+e^{-s/32}.
+\tag{G20}
+\]
+
+Since \(Q^*(u)\leq N+B(t)\) for \(u\leq t\), every arrival before \(t/2\) receives auxiliary service at least
+
+\[
+\frac{t}{2(N+B(t))}
+\geq\frac{\varepsilon^{1-\alpha}}{2(1+2\rho\varepsilon^{1-\alpha})}
+\geq\frac16\varepsilon^{1-\alpha}=:r_\varepsilon
+\quad\text{on }\mathcal H.
+\tag{G21}
+\]
+
+Choose \(\varepsilon\) small enough that \(r_\varepsilon\leq x_0\). On \(\mathcal H\), (G10) and (G19)-(G21) bound the conditional no-completion probability by
+
+\[
+\exp\{-B(t/2)F(r_\varepsilon)\}
+\leq\exp\left\{-\frac{\rho s\varepsilon^{-\alpha}}4
+\frac{a_0\varepsilon^{\beta(1-\alpha)}}{6^\beta}\right\}
+\leq\exp\left\{-\frac{a_0s}{8\,6^\beta}\right\}.
+\tag{G22}
+\]
+
+Thus there are constants \(C,d>0\), depending only on \(F\), such that
+
+\[
+\mathbb P(\varepsilon^\alpha A_\rho>s)\leq C e^{-ds}
+\tag{G23}
+\]
+
+for all \(s>0\) and all sufficiently small \(\varepsilon\). Dominated convergence in the tail-integral formula now proves all positive moment limits. Restoring the original time units replaces the mean-one prefactor by
+
+\[
+m\left(\frac{\beta+1}{c m^\beta}\right)^{1/(\beta+1)}
+=\left(\frac{(\beta+1)m}{c}\right)^{1/(\beta+1)}=\kappa.
+\]
+
+This proves (G2)-(G4). \(\square\)
+
+### 3.6 Regularly varying service CDFs: a scale beyond pure powers
+
+A pure-power approximation suppresses factors such as \(\log(1/x)\). Such factors can change the leading age scale even though the power exponent remains the same. The following extension gives a normalization directly from the service CDF, without differentiability or a finite second moment.
+
+**Theorem 1a (regularly varying lower endpoint).** Keep the queue model of Section 2 and the assumption \(0<m=\mathbb ES<\infty\). Suppose the mean-one service CDF \(F(x)=G(mx)\) satisfies
+\[
+\lim_{x\downarrow0}\frac{F(tx)}{F(x)}=t^\beta
+\quad\text{for every }t>0,\qquad \beta>0. \tag{R1}
+\]
+For sufficiently small \(\varepsilon>0\), define \(q_\varepsilon>0\) uniquely by
+\[
+\int_0^{q_\varepsilon}F(u)\,du=\frac{\varepsilon}{\beta+1},
+\qquad b_\varepsilon=\frac{q_\varepsilon}{\varepsilon}. \tag{R2}
+\]
+Then \(q_\varepsilon\to0\), \(b_\varepsilon\to\infty\), and
+\[
+\frac{A_\rho}{m b_\varepsilon}\Rightarrow
+Z_\beta=(\beta+1)^{1/(\beta+1)}
+X^{\beta/(\beta+1)}E^{1/(\beta+1)}. \tag{R3}
+\]
+For every \(p>0\), the \(p\)-th moment converges to
+\[
+(\beta+1)^{p/(\beta+1)}
+\Gamma\!\left(1+\frac{\beta p}{\beta+1}\right)
+\Gamma\!\left(1+\frac{p}{\beta+1}\right). \tag{R4}
+\]
+
+**Proof.** Work in mean-one units. Assumption (R1) implies \(F(0)=0\) and \(F(x)>0\) for all sufficiently small \(x>0\). Thus the integral in (R2) is continuous and strictly increasing near zero, even when \(F\) has jumps. The normalization is consequently well defined.
+
+The elementary integral consequence of (R1) needed here follows by changing variables:
+\[
+\frac{\int_0^qF(u)\,du}{qF(q)}
+=\int_0^1\frac{F(qv)}{F(q)}\,dv
+\longrightarrow\int_0^1v^\beta\,dv=\frac1{\beta+1}. \tag{R5}
+\]
+Dominated convergence applies because the ratio is between zero and one. Hence
+\[
+b_\varepsilon F(q_\varepsilon)\longrightarrow1,
+\qquad q_\varepsilon=\varepsilon b_\varepsilon\longrightarrow0. \tag{R6}
+\]
+Since \(F(q_\varepsilon)\to0\), this also proves \(b_\varepsilon\to\infty\).
+
+Use the same auxiliary queue and exact product (G10), now on the time interval \(t=s b_\varepsilon\). Conservation and the monotone coupling still give
+\[
+\varepsilon B(s b_\varepsilon)\to0,\qquad
+\varepsilon D_o(s b_\varepsilon)\to0
+\]
+in probability, since their expectations are \(\rho s q_\varepsilon\). Thus the scaled initial population is again asymptotically frozen and converges to \(X\).
+
+Fix \(0<\delta<K<\infty\), and restrict first to
+\(\delta\leq\varepsilon N\leq K\). For a fixed sufficiently small \(\eta>0\), the uniform population comparison bounds the service exposure of an arrival at rescaled time \(u=a_j/b_\varepsilon\) between
+\[
+q_\varepsilon\frac{s-u}{\varepsilon N+\eta}
+\quad\text{and}\quad
+q_\varepsilon\frac{s-u}{\varepsilon N-\eta}.
+\]
+Convergence in (R1) is uniform for multipliers in every compact interval \([0,L]\). To see this without a supplementary regularity assumption, use monotonicity of \(F(qv)/F(q)\), pointwise convergence and a finite mesh for the continuous limit \(v^\beta\); the interval next to zero is bounded by its right endpoint. The weighted Poisson law of large numbers, (R6), and this uniform convergence therefore yield
+\[
+\sum_{a_j\leq s b_\varepsilon}F(V_j(s b_\varepsilon))
+\Rightarrow\frac{s^{\beta+1}}{(\beta+1)X^\beta}. \tag{R7}
+\]
+More explicitly, after division by \(b_\varepsilon\) the arrival sum of any bounded continuous weight converges to its integral; its variance is \(O(b_\varepsilon^{-1})\). The multiplicative sandwich above, followed by \(\eta\downarrow0\), proves (R7). The largest summand tends to zero, so the logarithmic remainder estimate in Section 3.4 applies. Remove the restriction by \(\delta\downarrow0\) and \(K\uparrow\infty\). The bounded product then proves (R3).
+
+For moments, use
+\[
+\mathcal H=\{N\leq s/\varepsilon,\ B(t)\leq2\rho t,\
+B(t/2)\geq\rho t/4\},\qquad t=s b_\varepsilon .
+\]
+For small \(\varepsilon\), \(b_\varepsilon\geq1\), so the complement has the same bound as (G20). Every arrival before \(t/2\) receives at least
+\[
+\frac{q_\varepsilon}{2(1+2\rho q_\varepsilon)}
+\geq q_\varepsilon/6
+\]
+on \(\mathcal H\). Assumptions (R1) and (R6) imply
+\[
+b_\varepsilon F(q_\varepsilon/6)\longrightarrow6^{-\beta}>0.
+\]
+The conditional survival probability is therefore at most \(e^{-d_0s}\) for a constant \(d_0>0\) independent of sufficiently small \(\varepsilon\). Adding the exceptional-event probabilities gives
+\(\mathbb P(A_\rho/(m b_\varepsilon)>s)\leq C e^{-ds}\).
+Tail integration proves (R4). \(\square\)
+
+For \(F(x)\sim ax^\beta\), (R2) gives
+\(b_\varepsilon\sim a^{-1/(\beta+1)}\varepsilon^{-\beta/(\beta+1)}\);
+Theorem 1 is recovered exactly. More generally, if
+\(F(x)\sim ax^\beta(\log(1/x))^\gamma\), with any real \(\gamma\), then
+\[
+b_\varepsilon\sim
+\left(\frac{(\beta+1)^\gamma}{a}\right)^{1/(\beta+1)}
+\varepsilon^{-\beta/(\beta+1)}
+\bigl(\log(1/\varepsilon)\bigr)^{-\gamma/(\beta+1)}. \tag{R8}
+\]
+Indeed, substitution into \(qF(q)\sim\varepsilon\) gives the displayed constant because \(\log(1/q)\sim\log(1/\varepsilon)/(\beta+1)\). This example is a genuine enlargement of the pure-power statement: omitting the logarithmic factor gives the wrong leading scale when \(\gamma\ne0\).
+
+## 4. Service-distribution consequences
+
+For Erlang service with \(k\) stages of rate \(k/m\),
+
+\[
+\beta=k,\qquad c=\frac{(k/m)^k}{k!},\qquad
+\alpha=\frac{k}{k+1},\qquad
+\kappa=m\left(\frac{(k+1)k!}{k^k}\right)^{1/(k+1)}.
+\]
+
+Thus the age exponents for one-, two- and three-stage Erlang services are \(1/2,2/3,3/4\). All three queues have exactly the same stationary population distribution at the same load and mean service time. Their information-age divergence rates differ because their probabilities of very short service requirements differ.
+
+For a Weibull service distribution with shape \(\beta\), scale \(\theta\), and mean \(m=\theta\Gamma(1+1/\beta)\), the lower-end coefficient is \(c=\theta^{-\beta}\). The same exponent \(\beta/(\beta+1)\) follows. The theorem allows any positive \(\beta\), including \(\beta<1\).
+
+For a finite mixture of exponential services with rates \(\mu_j\) and probabilities \(p_j\),
+
+\[
+m=\sum_jp_j/\mu_j,\qquad c=\sum_jp_j\mu_j,\qquad\beta=1.
+\]
+
+At fixed mean \(m\), its leading mean-age coefficient is \(\pi\sqrt{m/c}/(2\sqrt2)\). Since \(mc\geq1\), that coefficient is no larger than the exponential-service coefficient with the same mean. This is an asymptotic comparison of these service distributions; it is not a general monotonicity theorem in the coefficient of variation.
+
+## 5. Exponential service, global bounds and the conjecture
+
+### 5.1 The complete exponential-service limit
+
+**Corollary 2.** For \(G(x)=1-e^{-\mu x}\), let \(\varepsilon=1-\rho\). Then
+
+\[
+\mu\sqrt\varepsilon A_\rho\Rightarrow W:=\sqrt{2E_1E_2},
+\qquad
+\lim_{\rho\uparrow1}\mathbb E[(\mu\sqrt\varepsilon A_\rho)^p]
+=2^{p/2}\Gamma(1+p/2)^2\quad(p>0),
+\tag{M1}
+\]
+
+where \(E_1,E_2\) are independent unit-mean exponentials. Consequently,
+
+\[
+\mathbb EA_\rho\sim\frac{\pi}{2\sqrt2\mu\sqrt{1-\rho}},
+\qquad
+\operatorname{Var}(A_\rho)\sim
+\frac{2-\pi^2/8}{\mu^2(1-\rho)}.
+\tag{M2}
+\]
+
+The limiting survival function can be written
+
+\[
+\mathbb P(W>s)=\int_0^\infty e^{-x-s^2/(2x)}\,dx
+=\sqrt2s K_1(\sqrt2s),\qquad s>0,
+\tag{M3}
+\]
+
+with value one at zero. Here \(K_1\) is the modified Bessel function of the second kind; the integral is its standard defining integral representation after rescaling. The distribution is classical. All the queueing statements follow by substituting \(m=1/\mu\), \(c=\mu\), and \(\beta=1\) in Theorem 1.
+
+### 5.2 Bounds at every load
+
+**Proposition 3.** For every \(0<\rho=\lambda/\mu<1\),
+
+\[
+\frac1\lambda+\frac1\mu
+\leq\mathbb EA_\rho
+\leq\frac1\mu\left(1+\frac1\rho+\frac{\rho^2}{1-\rho}\right).
+\tag{M4}
+\]
+
+For the lower bound, use the forward representation. Let \(S\) be the first arrival after zero. It has mean \(1/\lambda\). Independently, potential service events form a Poisson process of rate \(\mu\), thinned to remove idle events. The first fresh completion cannot precede the first potential service event after \(S\). That residual event time has mean \(1/\mu\). In fact this construction proves the stochastic lower bound
+
+\[
+\operatorname{Exp}(\lambda)+\operatorname{Exp}(\mu)
+\ \leq_{\mathrm{st}}\ A_\rho,
+\tag{M5}
+\]
+
+with independent exponentials on the left.
+
+For the upper bound, couple processor sharing and first-come-first-served (FCFS) through common arrival times and common rate-\(\mu\) potential service times. Under either discipline every nonempty queue completes a packet at rate \(\mu\). Their queue lengths and actual departure epochs therefore agree. Label arrivals after any common empty epoch in increasing order. After \(k\) subsequent completions, FCFS has delivered labels \(1,\ldots,k\). Processor sharing has delivered \(k\) distinct labels, so its largest delivered label is at least \(k\). Hence the freshest timestamp delivered by processor sharing is at least as large at every time. At an empty epoch both queues have delivered all earlier arrivals, so their freshest timestamps agree. The positive recurrent birth-death chain has a past empty epoch almost surely, which makes the same coupling valid in stationarity. Therefore
+
+\[
+A_\rho\leq_{\mathrm{st}} A_\rho^{\mathrm{FCFS}}.
+\tag{M6}
+\]
+
+For completeness, the classical FCFS mean can be obtained directly. Let \(Y\sim\operatorname{Exp}(\lambda)\) be an interarrival time, \(T_-\sim\operatorname{Exp}(\mu-\lambda)\) the preceding packet's stationary system time, and \(S\sim\operatorname{Exp}(\mu)\) the current packet's service. Then \(Y\) is independent of \(T_-\), and the current system time is \(T=(T_--Y)^++S\). The exponential law of \(T_-\) follows by mixing sums of geometric-many independent rate-\(\mu\) exponentials. The usual area identity between consecutive delivery epochs yields
+
+\[
+\mathbb EA_\rho^{\mathrm{FCFS}}
+=\frac1\lambda+\lambda\mathbb E[YT].
+\]
+
+Now \(\lambda\mathbb E[YS]=1/\mu\), while
+
+\[
+\mathbb E[Y(T_--Y)^+]
+=\int_0^\infty y\lambda e^{-\lambda y}
+\frac{e^{-(\mu-\lambda)y}}{\mu-\lambda}\,dy
+=\frac{\lambda}{\mu^2(\mu-\lambda)}.
+\]
+
+Combining this computation with the stochastic comparison proves (M4).
+
+Define exactly the function used in the source,
+
+\[
+C(\rho)=\mu\mathbb EA_\rho-1-\rho^{-1}.
+\]
+
+Then (M4) proves \(0\leq C(\rho)\leq\rho^2/(1-\rho)\) for every \(\rho\). In particular \(C(\rho)\to0\) at zero. Corollary 2 gives
+
+\[
+\sqrt{1-\rho}\,C(\rho)\longrightarrow\frac\pi{2\sqrt2},
+\tag{M7}
+\]
+
+so \(C(\rho)\to\infty\) at one. These statements establish all parts of Conjecture 1 preceding equation (20).
+
+Equation (20) in the inspected arXiv manuscript asserts, for sufficiently large \(\rho\),
+
+\[
+\frac{(\rho-1/2)^3}{1-\rho}\leq C(\rho)
+\leq\frac{3\rho}{4\sqrt{1-\rho}}.
+\tag{M8}
+\]
+
+These two bounds are mutually incompatible even before the queue is analysed: their ratio tends to infinity. The new limit also determines which individual asymptotic claims fail. The left member grows too quickly, while the right member has limiting coefficient \(3/4<\pi/(2\sqrt2)\). Thus both sides of (M8) fail sufficiently close to saturation. This attribution is to the inspected arXiv version. Direct inspection of the journal version of record and any formal correction remains a bibliographic limitation. The substantive theorem does not depend on the printed inconsistency.
+
+## 6. Exact representations and reproducible checks
+
+### 6.1 A two-coordinate generator for exponential service
+
+The stationary-age survival event is a first-fresh-completion event by (G8). With exponential service, conditional on observable queue history and attained services, unobserved residual requirements remain independent exponentials. Before the first fresh completion, let \(m,n\) be the old and fresh populations. The exact transient transitions are
+
+\[
+(m,n)\longrightarrow(m,n+1)\quad\text{at rate }\lambda,
+\qquad
+(m,n)\longrightarrow(m-1,n)\quad\text{at rate }\mu\frac{m}{m+n},
+\]
+
+with killing at rate \(\mu n/(m+n)\); both service rates are zero at the empty state. Initialise \(m\) geometrically with \(\mathbb P(m=k)=(1-\rho)\rho^k\) and \(n=0\). Simulation until killing gives an exact sample from the stationary age distribution. It needs neither a vector of timestamps nor a burn-in period.
+
+Equivalently, suppress killing, give the old population deaths at rate \(\mu M/(M+B)\), and let fresh arrivals remain forever. Then
+
+\[
+\mathbb P(A_\rho>t)=\mathbb E\exp\left\{-\int_0^t\mu\frac{B(u)}{M(u)+B(u)}\,du\right\}.
+\tag{V1}
+\]
+
+This is also obtained directly from (G10) by using an exponential survival function and summing all fresh service exposures. Transition rates are bounded by \(\lambda+\mu\), so the process is nonexplosive.
+
+### 6.2 Finite-state exact checks
+
+The accompanying `verify.py` solves the finite-capacity killed chains by Gaussian elimination over rational numbers. At \(\lambda=1/2\), \(\mu=1\), capacities one, two and three give the exact mean ages
+
+\[
+\frac{10}{3},\qquad\frac{45}{14},\qquad\frac{1292}{405}.
+\]
+
+For capacity two the result exactly matches Proposition 1 of Gandarias et al. (2023). The finite-state check tests the first-completion reduction and the handling of obsolete packets. The main theorem uses an infinite buffer throughout and does not approximate it by a fixed capacity.
+
+### 6.3 Independent stationary samples
+
+For exponential mean-one service, `code/verify.py` uses 200,000 independent samples at each listed load. The supplied research run's full output, including tail frequencies and seeds, is retained in `evidence/historical/verification.json`.
+
+| Load \(\rho\) | Mean of \(\sqrt{1-\rho}A_\rho\) | Monte Carlo standard error |
+|---|---:|---:|
+| 0.9000 | 1.285566 | 0.002112 |
+| 0.9900 | 1.145599 | 0.001999 |
+| 0.9990 | 1.116731 | 0.001965 |
+| 0.9999 | 1.110625 | 0.001962 |
+| Limit | \(\pi/(2\sqrt2)=1.110721\) | — |
+
+At \(\rho=0.9999\), the scaled second moment is 2.003068, compared with the exact limit 2.
+
+`verify_erlang.py` checks non-exponential examples using an exact phase-count chain. Conditional on the geometric stationary population, the residual service of an Erlang-\(k\) packet is an equal mixture of Erlang distributions with one through \(k\) phases. This follows from the equilibrium-residual law in Section 3.1. Each phase has rate \(k\) in mean-one units. A new packet enters with \(k\) phases; a fresh packet's final phase completion kills the chain. Thus these too are direct stationary-age samples, without burn-in.
+
+| Erlang shape | Age exponent | Samples per load | Scaled mean at 0.99 | At 0.999 | At 0.9999 | Limit |
+|---|---:|---:|---:|---:|---:|---:|
+| 2 | \(2/3\) | 100,000 | 1.006968 | 0.961269 | 0.942002 | 0.922792 |
+| 3 | \(3/4\) | 50,000 | 0.934616 | 0.869475 | 0.840009 | 0.808869 |
+
+At the last load the standard errors are respectively 0.002392 and 0.003112. These values show appreciable finite-load bias beyond simulation uncertainty; the theorem asserts a limit and supplies no convergence rate. The bias decreases in the displayed range. Complete supplied results, including second moments, are in `evidence/historical/erlang_verification.json`. Computation corroborates the reductions and asymptotic predictions; it is separate from the proof.
+
+The publication check `code/replay.py` independently reconstructs the rational finite-state linear systems, checks the pure-power scale algebra, tests a logarithmic scale example and runs 2,000 stationary exponential samples with a new seed. It does not rerun the much larger historical tables. Its recorded environment and results are supplied separately. The historical runs did not record the exact original NumPy version, so bitwise reproduction of their random streams is not asserted.
+
+## 7. Interpretation, prior-art boundary and limitations
+
+The initial population is of order \(\varepsilon^{-1}\), with an asymptotically exponential scaled size. During an interval of length \(\varepsilon^{-\alpha}\), each early fresh packet receives work of order \(\varepsilon^{1-\alpha}\), and the number of fresh packets is of order \(\varepsilon^{-\alpha}\). The small-service assumption gives an individual completion probability of order \(\varepsilon^{\beta(1-\alpha)}\). Balancing this against the number of fresh packets gives \(\beta(1-\alpha)=\alpha\), or \(\alpha=\beta/(\beta+1)\). The integral over arrival times and the random initial population supply the exact distribution and constant. The proof controls both the changing backlog and the large-age tail, which are needed to justify this scaling argument and passage to all moments.
+
+At equal load and equal mean service, the stationary population is identical for exponential, Erlang and Weibull service. Their age exponents can differ. This provides a specific limitation of using ordinary queue occupancy as a proxy for freshness. For exponential service, the FCFS mean age grows at order \((1-\rho)^{-1}\), whereas the processor-sharing mean age grows at order \((1-\rho)^{-1/2}\). Both still diverge as saturation is approached.
+
+The literature search inspected the originating 2023 conjecture, the 2021 scheduling study, primary insensitivity theorems, subsequent age papers on shared computing systems, and formula-level aliases for the limiting law and first-completion construction. Chiariotti (2024) uses periodic requests and cancellation/replacement of old requests for each client; its model differs from the present lossless infinite-buffer queue. Inoue and Mandjes (2025) analyse a shared server under FCFS, identified by their workload-to-sojourn formula, rather than egalitarian processor sharing. Redder (2026) studies parallel renewal processes rather than this queueing model. No equivalent general-service or exponential heavy-traffic age theorem was located in the bounded corpus recorded in `novelty_report.md`. This is not a proof of historical priority or a claim that no later resolution exists.
+
+The assumptions have concrete limits. The arrival process is Poisson, scheduling is equal processor sharing, obsolete jobs remain until service completion, and the monitor retains the maximum delivered generation time. A positive minimum service requirement, an atom at zero, time-varying service laws, deterministic sampling, finite buffers, and cancellation policies are outside both theorems. Theorem 1a includes general regularly varying CDFs of positive index, but does not include index zero or rapidly varying lower endpoints. Neither theorem gives a closed-form finite-load mean or a numerical error bound for a heavy-traffic approximation. The global stochastic comparisons in Section 5 use exponential service and are not asserted for arbitrary \(G\).
+
+The original pure-power proof underwent a separate AI adversarial review within the research workflow. Such review is not external human peer review. The theorem's provenance and significance remain subject to the documented literature-search boundary and to normal scholarly assessment.
+
+## 8. Research declarations
+
+**Data and code availability.** The accompanying repository contains this complete manuscript, the finite-state and simulation code, historical numerical outputs, a bounded fresh replay, a claim-to-evidence map and a rating-free revision response. The source repository is https://github.com/ipitchford/processor-sharing-freshness and the versioned archive is https://doi.org/10.5281/zenodo.23501620. The mathematical proofs are self-contained apart from the explicitly cited classical stationary-queue theorem. No private review or inaccessible development note is needed to follow the argument.
+
+**Ethics.** This theoretical and computational study uses no human participants, personal data or animal subjects.
+
+**Contributions.** The release is attributed to Anonymous. The public evidence records the mathematical development, software and validation scopes. It does not assign unverified individual human CRediT roles.
+
+**Funding and competing interests.** No external research funding or competing interest has been declared in the supplied materials.
+
+**AI assistance.** AI agents assisted with mathematical development, literature checking, code, manuscript preparation and adversarial review. The accompanying computational results are distinguished from analytic proof. AI review is not represented as independent human peer review or formal proof verification.
+
+## References
+
+Bonald, T., & Proutière, A. (2002). Insensitivity in processor-sharing networks. *Performance Evaluation, 49*, 193–209. https://doi.org/10.1016/S0166-5316(02)00110-4
+
+Chiariotti, F. (2024). Age of information analysis for a shared edge computing server. *IEEE Transactions on Communications, 72*(12), 7826–7841. https://doi.org/10.1109/TCOMM.2024.3412761
+
+Gandarias, B., Doncel, J., & Assaad, M. (2023). On the age of information of processor sharing systems. *Journal of Communications and Networks, 25*(5), 643–656. https://doi.org/10.23919/JCN.2023.000042 . Inspected manuscript: https://arxiv.org/pdf/2309.02083 . The conjecture attribution and fake-update convention refer specifically to Conjecture 1, equations (19)–(20), and Appendix A, Table I, of that version.
+
+Inoue, Y., & Mandjes, M. (2025). Characterizing the age of information with multiple coexisting data streams. *IEEE Transactions on Information Theory, 71*(6), 4732–4753. https://doi.org/10.1109/TIT.2025.3544266
+
+Liu, Z., Huang, L., Li, B., & Ji, B. (2021). Anti-aging scheduling in single-server queues: A systematic and comparative study. *Journal of Communications and Networks, 23*(2), 91–105. https://doi.org/10.23919/JCN.2021.000005 . Inspected manuscript: https://arxiv.org/pdf/2003.04271
+
+Redder, A. (2026). Age-of-information in distributed systems caused by asynchronous computing modeled as parallel renewal processes. *Statistics and Computing, 36*, Article 136. https://doi.org/10.1007/s11222-026-10885-x
+
+Zachary, S. (2007). A note on insensitivity in stochastic networks. *Journal of Applied Probability, 44*(1), 238–248. https://doi.org/10.1239/jap/1175267175 . Theorem 1; preprint: https://arxiv.org/abs/math/0611526

@@ -1,0 +1,84 @@
+{
+  "service_mean": 1,
+  "method": "exact stationary phase-count simulation",
+  "runs": [
+    {
+      "shape": 2,
+      "rho": 0.99,
+      "sample_count": 100000,
+      "seed": 11220,
+      "events": 6479527,
+      "alpha": 0.6666666666666666,
+      "scaled_mean": 1.0069682238315156,
+      "scaled_mean_se": 0.0025422230252861284,
+      "scaled_second_moment": 1.6602683319379823,
+      "limit_mean": 0.9227919846102611,
+      "limit_second_moment": 1.408444170263228
+    },
+    {
+      "shape": 2,
+      "rho": 0.999,
+      "sample_count": 100000,
+      "seed": 11221,
+      "events": 28833220,
+      "alpha": 0.6666666666666666,
+      "scaled_mean": 0.9612692103742237,
+      "scaled_mean_se": 0.002436606027596177,
+      "scaled_second_moment": 1.5177374511363524,
+      "limit_mean": 0.9227919846102611,
+      "limit_second_moment": 1.408444170263228
+    },
+    {
+      "shape": 2,
+      "rho": 0.9999,
+      "sample_count": 100000,
+      "seed": 11222,
+      "events": 131168610,
+      "alpha": 0.6666666666666666,
+      "scaled_mean": 0.942002238840646,
+      "scaled_mean_se": 0.0023924162022352885,
+      "scaled_second_moment": 1.4597280227972969,
+      "limit_mean": 0.9227919846102611,
+      "limit_second_moment": 1.408444170263228
+    },
+    {
+      "shape": 3,
+      "rho": 0.99,
+      "sample_count": 50000,
+      "seed": 11230,
+      "events": 5891318,
+      "alpha": 0.75,
+      "scaled_mean": 0.9346158982551872,
+      "scaled_mean_se": 0.0034195100006955887,
+      "scaled_second_moment": 1.458147616465563,
+      "limit_mean": 0.8088686659255292,
+      "limit_second_moment": 1.110720734539592
+    },
+    {
+      "shape": 3,
+      "rho": 0.999,
+      "sample_count": 50000,
+      "seed": 11231,
+      "events": 30924097,
+      "alpha": 0.75,
+      "scaled_mean": 0.8694746275220521,
+      "scaled_mean_se": 0.0031803198213958338,
+      "scaled_second_moment": 1.261697721788606,
+      "limit_mean": 0.8088686659255292,
+      "limit_second_moment": 1.110720734539592
+    },
+    {
+      "shape": 3,
+      "rho": 0.9999,
+      "sample_count": 50000,
+      "seed": 11232,
+      "events": 168000943,
+      "alpha": 0.75,
+      "scaled_mean": 0.8400086443120183,
+      "scaled_mean_se": 0.0031119083163058795,
+      "scaled_second_moment": 1.1898035070002306,
+      "limit_mean": 0.8088686659255292,
+      "limit_second_moment": 1.110720734539592
+    }
+  ]
+}

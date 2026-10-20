@@ -1,0 +1,59 @@
+{
+  "status": "pass",
+  "scope": "finite exact checks and diagnostic simulation; not a proof certificate",
+  "python": "3.14.7",
+  "numpy": "2.4.2",
+  "optimized": false,
+  "finite_means": [
+    "10/3",
+    "45/14",
+    "1292/405"
+  ],
+  "logarithmic_scale_diagnostic": [
+    {
+      "minus_log_q": 10,
+      "bFq": 0.9523809523809526,
+      "b_over_asymptotic": 0.9167391679424604
+    },
+    {
+      "minus_log_q": 20,
+      "bFq": 0.975609756097561,
+      "b_over_asymptotic": 0.9497056683180864
+    },
+    {
+      "minus_log_q": 40,
+      "bFq": 0.9876543209876543,
+      "b_over_asymptotic": 0.9705458437845684
+    },
+    {
+      "minus_log_q": 80,
+      "bFq": 0.9937888198757763,
+      "b_over_asymptotic": 0.983123880328363
+    }
+  ],
+  "fresh_seed_sample": {
+    "rho": 0.999,
+    "sample_count": 2000,
+    "seed": 20261020,
+    "events": 139871,
+    "scaled_mean": 1.1074825966707935,
+    "scaled_mean_se": 0.019863254275483373,
+    "scaled_second_moment": 2.015220893883288,
+    "scaled_survival": {
+      "0.25": 0.892,
+      "0.5": 0.7195,
+      "1.0": 0.4435,
+      "2.0": 0.1415,
+      "3.0": 0.0445,
+      "4.0": 0.0115
+    },
+    "mean_age": 35.02167474477317,
+    "mean_C": 33.02067374377217
+  },
+  "sha256": {
+    "paper.md": "86fe20630f4c0e6549cea54ee8bc8d7955ccfc651aa5481f9445db5772e28f3a",
+    "code/replay.py": "ab84e04c50067b0678ec801e6a064393f84de783c0ded36cbf58519b220b82bf",
+    "code/verify.py": "b453eef32bf6b2a99e8ddd2cf38ab423718b631fc05abcbb173c6fa97820d065",
+    "code/verify_erlang.py": "e1cd133d3947edd13cef1bf139c8bb51980aca8394ad3aa4e7220d23bb71a7ff"
+  }
+}
